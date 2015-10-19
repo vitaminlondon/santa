@@ -202,8 +202,7 @@ io.on('connection', function(socket)
 
             // initialize the controller
             socket.emit("connected", {});
-            console.log("device.gameCode = " + device.gameCode);
-            console.log(socketCodes);
+            
             // start the game
             socketCodes[device.gameCode].emit("connected", {});
          }
