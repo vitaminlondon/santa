@@ -131,36 +131,22 @@
       }
    };
 */
+// santass.herokuapp.com
+// heroku ps:scale web=1 --app santass
 
-var express = require('./node_modules/express');
-var io = require('./node_modules/socket.io')
 var crypto = require('crypto');
-var http = require('http'); 
+var app = require('express')();
+app.use(function (req, res, next) 
+{
+   // Website you wish to allow to connect
+   res.setHeader('Access-Control-Allow-Origin', 'http://christmas.vitaminlondon.com');
+});
 
+var server = require('http').createServer(app);
+var io = require('socket.io')(server);
+io.set('origins', '*:*');
 
-
-
-
-// Set up our app with Express framework
-var app = express();
-
-
-
-
-
-
-// Create our HTTP server
-var server = http.createServer(app);
-
-// Tell Socket.io to pay attention
-io = io.listen(server);
-
-
-
-
-
-
-app.listen(process.env.PORT || 3000);
+server.listen(process.env.PORT || 3000);
 
 
 
@@ -170,13 +156,9 @@ app.listen(process.env.PORT || 3000);
 // Sockets object to save game code -> socked associations
 var socketCodes = {};
 
-
-
-
-
-
 // When a client connects...
-io.sockets.on('connection', function(socket) 
+//io.sockets.on('connection', function(socket) 
+io.on('connection', function(socket) 
 {
    // Confirm the connection
    socket.emit("welcome", {});
@@ -230,29 +212,29 @@ io.sockets.on('connection', function(socket)
       }
    });
    
-   // send accelerate command to game client
-   socket.on("accelerate", function(data)
+   // send jump command to game client
+   socket.on("jump", function(data)
    {
-      var bAccelerate = data.accelerate;
+      var bAccelerate = data.jump;
       if(socket.gameCode && socket.gameCode in socketCodes)
       {
-         socketCodes[socket.gameCode].emit("accelerate", 
-          bAccelerate);
+         socketCodes[socket.gameCode].emit("jump", bAccelerate);
       }
    });
    
-   // send turn command to game client
-   socket.on("turn", function(data)
+   // send shoot command to game client
+   socket.on("shoot", function(data)
    {
       if(socket.gameCode && socket.gameCode in socketCodes)
       {
-         socketCodes[socket.gameCode].emit("turn", data.turn);
+         socketCodes[socket.gameCode].emit("shoot", data.shoot);
       }
    });
 });
 
 // When a client disconnects...
-io.sockets.on('disconnect', function(socket) 
+//io.sockets.on('disconnect', function(socket)
+io.on('disconnect', function(socket) 
 {
    // remove game code -> socket association on disconnect
    if(socket.gameCode && socket.gameCode in socketCodes)
