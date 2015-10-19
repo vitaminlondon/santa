@@ -219,10 +219,9 @@ io.on('connection', function(socket)
    // send jump command to game client
    socket.on("jump", function(data)
    {
-      var bAccelerate = data.jump;
       if(socket.gameCode && socket.gameCode in socketCodes)
       {
-         socketCodes[socket.gameCode].emit("jump", bAccelerate);
+         socketCodes[socket.gameCode].emit("jump");
       }
    });
    
@@ -231,7 +230,7 @@ io.on('connection', function(socket)
    {
       if(socket.gameCode && socket.gameCode in socketCodes)
       {
-         socketCodes[socket.gameCode].emit("shoot", data.shoot);
+         socketCodes[socket.gameCode].emit("shoot");
       }
    });
 });
