@@ -180,7 +180,7 @@ io.on('connection', function(socket)
          }
          
          // Store game code -> socket association
-         socketCodes[gameCode] = io.sockets.sockets[socket.id];
+         socketCodes[gameCode] = io.sockets[socket.id];
          socket.gameCode = gameCode
          
          // Tell game client to initialize 
