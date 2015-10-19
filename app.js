@@ -223,6 +223,7 @@ io.on('connection', function(socket)
       if(socket.gameCode && socket.gameCode in socketCodes)
       {
          socketCodes[socket.gameCode].emit("jump");
+         console.log(socket.gameCode + " >> jump");
       }
    });
    
@@ -233,6 +234,7 @@ io.on('connection', function(socket)
       if(socket.gameCode && socket.gameCode in socketCodes)
       {
          socketCodes[socket.gameCode].emit("shoot");
+         console.log(socket.gameCode + " >> shoot");
       }
    });
 });
