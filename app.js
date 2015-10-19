@@ -219,6 +219,7 @@ io.on('connection', function(socket)
    // send jump command to game client
    socket.on("jump", function(data)
    {
+      console.log("jump");
       if(socket.gameCode && socket.gameCode in socketCodes)
       {
          socketCodes[socket.gameCode].emit("jump");
@@ -228,6 +229,7 @@ io.on('connection', function(socket)
    // send shoot command to game client
    socket.on("shoot", function(data)
    {
+      console.log("shoot");
       if(socket.gameCode && socket.gameCode in socketCodes)
       {
          socketCodes[socket.gameCode].emit("shoot");
@@ -236,7 +238,6 @@ io.on('connection', function(socket)
 });
 
 // When a client disconnects...
-//io.sockets.on('disconnect', function(socket)
 io.on('disconnect', function(socket) 
 {
    // remove game code -> socket association on disconnect
