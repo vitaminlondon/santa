@@ -180,7 +180,7 @@ io.on('connection', function(socket)
          }
          
          // Store game code -> socket association
-         socketCodes[gameCode] = io.sockets.sockets[socket.id];
+         socketCodes[gameCode] = socket;
          socket.gameCode = gameCode
          console.log(" ======= socket.id ======= ");
          console.log(socket.id);
@@ -202,7 +202,7 @@ io.on('connection', function(socket)
 
             // initialize the controller
             socket.emit("connected", {});
-            
+
             // start the game
             socketCodes[device.gameCode].emit("connected", {});
          }
