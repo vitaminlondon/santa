@@ -1,6 +1,7 @@
 {
 	"name": "santa",
 	"version": "1.0.0",
+	"description" : "santa",
 	"dependencies" : {
 		"express" : "4.13.3",
 		"mongoose" : "4.1.3",

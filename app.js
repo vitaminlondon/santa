@@ -132,10 +132,10 @@
    };
 */
 
-var express = require('./node modules/express');
-var http = require('./node modules/http');
-var io = require('./node modules/socket.io')
-var crypto = require('./node modules/crypto');
+var express = require('./node_modules/express');
+var io = require('./node_modules/socket.io')
+var crypto = require('crypto');
+var http = require('http');
 
 
 
