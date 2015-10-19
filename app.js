@@ -136,15 +136,15 @@
 
 var crypto = require('crypto');
 var app = require('express')();
-app.use(function (req, res, next) 
-{
-   // Website you wish to allow to connect
-   res.setHeader('Access-Control-Allow-Origin', 'http://christmas.vitaminlondon.com');
-});
+// app.use(function (req, res, next) 
+// {
+//    // Website you wish to allow to connect
+//    res.setHeader('Access-Control-Allow-Origin', 'http://christmas.vitaminlondon.com');
+// });
 
 var server = require('http').createServer(app);
 var io = require('socket.io')(server);
-io.set('origins', '*:*');
+//io.set('origins', '*:*');
 
 server.listen(process.env.PORT || 3000);
 
@@ -198,7 +198,8 @@ io.on('connection', function(socket)
 
             // initialize the controller
             socket.emit("connected", {});
-            
+            console.log("device.gameCode = " + device.gameCode);
+            console.log(socketCodes);
             // start the game
             socketCodes[device.gameCode].emit("connected", {});
          }
