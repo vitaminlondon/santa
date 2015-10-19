@@ -182,6 +182,8 @@ io.on('connection', function(socket)
          // Store game code -> socket association
          socketCodes[gameCode] = io.sockets.sockets[socket.id];
          socket.gameCode = gameCode
+         console.log(" ======= socket.id ======= ");
+         console.log(socket.id);
          console.log(" ======= io.sockets ======= ");
          console.log(io.sockets);
          
