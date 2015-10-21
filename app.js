@@ -123,15 +123,14 @@ io.on('connection', function(socket)
          socketCodes[socket.gameCode].emit("b");
       }
    });
-});
 
-// When a client disconnects...
-io.on('disconnect', function(socket) 
-{
-   // remove game code -> socket association on disconnect
-   if(socket.gameCode && socket.gameCode in socketCodes)
+   socket.on('disconnect', function () 
    {
-      socketCodes[socket.gameCode].emit("disconnected");
-      delete socketCodes[socket.gameCode];
-   }
+      // remove game code -> socket association on disconnect
+      if(socket.gameCode && socket.gameCode in socketCodes)
+      {
+         socketCodes[socket.gameCode].emit("disconnected");
+         delete socketCodes[socket.gameCode];
+      }
+    });
 });
