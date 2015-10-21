@@ -41,6 +41,7 @@ io.on('connection', function(socket)
          //  and show the game code to the user
          socket.emit("initialize", gameCode);
       }
+
       // if client is a phone controller
       else if(device.type == "controller")
       {
@@ -130,6 +131,7 @@ io.on('disconnect', function(socket)
    // remove game code -> socket association on disconnect
    if(socket.gameCode && socket.gameCode in socketCodes)
    {
+      socketCodes[socket.gameCode].emit("disconnected");
       delete socketCodes[socket.gameCode];
    }
 });
