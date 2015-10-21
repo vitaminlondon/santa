@@ -66,6 +66,13 @@ io.on('connection', function(socket)
       }
    });
    
+   socket.on("jump", function(data)
+   {
+      if(socket.gameCode && socket.gameCode in socketCodes)
+      {
+         socketCodes[socket.gameCode].emit("jump");
+      }
+   });
    socket.on("up", function(data)
    {
       if(socket.gameCode && socket.gameCode in socketCodes)
