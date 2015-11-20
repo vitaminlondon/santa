@@ -28,11 +28,13 @@ io.on('connection', function(socket)
          var gameCode = crypto.randomBytes(3).toString('hex');
          
          // Ensure uniqueness
-         while(gameCode in socketCodes)
+         while (gameCode in socketCodes)
          {
             gameCode = crypto.randomBytes(3).toString('hex');
          }
          
+         console.log('desktop gameCode = ' + gameCode);
+
          // Store game code -> socket association
          socketCodes[gameCode] = socket;
          socket.gameCode = gameCode
@@ -43,24 +45,39 @@ io.on('connection', function(socket)
       }
 
       // if client is a phone controller
-      else if(device.type == "controller")
+      else if (device.type == "controller")
       {
          // if game code is valid...
-         if(device.gameCode in socketCodes)
+         if (device.gameCode in socketCodes)
          {
-            // save the game code for controller commands
-            socket.gameCode = device.gameCode
+            console.log('controller gameCode = ' + device.gameCode);
 
-            // initialize the controller
-            socket.emit("connected", {});
+            if (!socketCodes[device.gameCode].activated)
+            {
+               // do not allow multiple controllers on the same game session
+               socketCodes[device.gameCode].activated = true;
 
-            // start the game
-            socketCodes[device.gameCode].emit("connected", {});
+               // save the game code for controller commands
+               socket.gameCode = device.gameCode
+
+               // initialize the controller
+               socket.emit("connected", {});
+
+               // start the game
+               socketCodes[device.gameCode].emit("connected", {});
+
+               console.log('controller connected to device');
+            }
+            else
+            {
+               console.log('a controller has already been connected to this game session');
+            }
          }
-         // else game code is invalid, 
+         //  else game code is invalid, 
          //  send fail message and disconnect
          else
          {
+            console.log('game code received by controller is invalid');
             socket.emit("fail", {});
             socket.disconnect();
          }
@@ -126,8 +143,10 @@ io.on('connection', function(socket)
 
    socket.on('disconnect', function () 
    {
+      console.log('disconnected -->' + socket.gameCode);
+      
       // remove game code -> socket association on disconnect
-      if(socket.gameCode && socket.gameCode in socketCodes)
+      if(socket.gameCode && (socket.gameCode in socketCodes))
       {
          socketCodes[socket.gameCode].emit("disconnected");
          delete socketCodes[socket.gameCode];
