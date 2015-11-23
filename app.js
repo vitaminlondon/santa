@@ -142,12 +142,11 @@ io.on('connection', function(socket)
    });
 
    socket.on('disconnect', function () 
-   {
-      console.log('disconnected -->' + socket.gameCode);
-      
+   {     
       // remove game code -> socket association on disconnect
       if(socket.gameCode && (socket.gameCode in socketCodes))
       {
+         console.log('active socket disconnected = ' + socket.gameCode);
          socketCodes[socket.gameCode].emit("disconnected");
          delete socketCodes[socket.gameCode];
       }
