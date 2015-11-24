@@ -52,11 +52,6 @@ io.on('connection', function(socket)
    // Receive the client device type
    socket.on("device", function(device)
    {
-      conditional_log('client sent device type');
-      conditional_log(' ****** device ****** ');
-      conditional_log(device);
-      conditional_log(' ****** device ****** ');
-
       if(device.type == "game")
       {
          conditional_log('client is game');
@@ -68,7 +63,7 @@ io.on('connection', function(socket)
             gameCode = crypto.randomBytes(3).toString('hex');
          }
          
-         conditional_log('unique code generated for this game = ' + gameCode);
+         conditional_log('UID for this game = ' + gameCode);
 
          // Store game code -> socket association
          socketCodes[gameCode] = socket;
@@ -82,12 +77,12 @@ io.on('connection', function(socket)
       // if client is a phone controller
       else if (device.type == "controller")
       {
-         conditional_log('client is controller with gamecode ==>' + device.gameCode);
+         conditional_log('client is controller using UID =' + device.gameCode);
 
          // if game code is valid...
          if (device.gameCode in socketCodes)
          {
-            conditional_log('controller gameCode ' + device.gameCode + ' found');
+            conditional_log('controller used by UID found');
 
             if (!socketCodes[device.gameCode].activated)
             {
@@ -183,7 +178,7 @@ io.on('connection', function(socket)
       // remove game code -> socket association on disconnect
       if(socket.gameCode && (socket.gameCode in socketCodes))
       {
-         conditional_log('active socket disconnected = ' + socket.gameCode);
+         conditional_log('active socket disconnected for UID = ' + socket.gameCode);
          socketCodes[socket.gameCode].emit("disconnected");
          delete socketCodes[socket.gameCode];
       }
