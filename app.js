@@ -42,9 +42,7 @@ var socketCodes = {};
 io.on('connection', function(socket) 
 {
    conditional_log('client connected');
-   conditional_log(' ****** socket ****** ');
-   conditional_log(socket);
-   conditional_log(' ****** socket ****** ');
+
 
    // CONFIRM CONNECTION WITH CLIENT
    socket.emit("welcome", {});
