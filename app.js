@@ -93,12 +93,10 @@ io.on('connection', function(socket)
                socket.gameCode = device.gameCode
 
                // initialize the controller
-               socket.emit("connected", {
-                  gamecode: socket.gameCode
-               });
+               socket.emit("connected", socket.gameCode);
 
                // start the game
-               socketCodes[device.gameCode].emit("connected", {});
+               socketCodes[device.gameCode].emit("connected", gameCode);
 
                conditional_log('controller connected to device');
             }
@@ -112,7 +110,7 @@ io.on('connection', function(socket)
          else
          {
             conditional_log('game code received by controller is not found');
-            socket.emit("fail", {});
+            socket.emit("fail", device.gameCode);
             socket.disconnect();
          }
       }
@@ -181,7 +179,7 @@ io.on('connection', function(socket)
       if(socket.gameCode && (socket.gameCode in socketCodes))
       {
          conditional_log('active socket disconnected for UID = ' + socket.gameCode);
-         socketCodes[socket.gameCode].emit("disconnected", {gameCode: socket.gameCode});
+         socketCodes[socket.gameCode].emit("disconnected", socket.gameCode);
          delete socketCodes[socket.gameCode];
       }
     });
