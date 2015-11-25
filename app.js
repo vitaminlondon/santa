@@ -28,6 +28,7 @@ var io = require('socket.io')(server);
 
 // START LISTENING
 server.listen(process.env.PORT || 3000);
+conditional_log('<><><><><><><><> LISTENING <><><><><><><><>');
 
 // STORE SOCKET CONNECTIONS
 var socketCodes = {};
