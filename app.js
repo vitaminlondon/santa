@@ -116,6 +116,25 @@ io.on('connection', function(socket)
          }
       }
    });
+
+   socket.on("new", function ()
+   {
+      var gameCode = crypto.randomBytes(3).toString('hex');
+      while (gameCode in socketCodes)
+      {
+         gameCode = crypto.randomBytes(3).toString('hex');
+      }
+      
+      conditional_log('UID for this game will be ' + gameCode);
+
+      // Store game code -> socket association
+      socketCodes[gameCode] = socket;
+      socket.gameCode = gameCode
+      
+      // Tell game client to initialize 
+      //  and show the game code to the user
+      socket.emit("initialize", gameCode);
+   });
    
    socket.on("jump", function(data)
    {
