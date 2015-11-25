@@ -130,6 +130,7 @@ io.on('connection', function(socket)
       // Store game code -> socket association
       socketCodes[gameCode] = socket;
       socket.gameCode = gameCode
+      socketCodes[gameCode].activated = false;
       
       // Tell game client to initialize 
       //  and show the game code to the user
@@ -202,5 +203,5 @@ io.on('connection', function(socket)
          socketCodes[socket.gameCode].emit("disconnected", socket.gameCode);
          delete socketCodes[socket.gameCode];
       }
-    });
+   });
 });
