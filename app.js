@@ -109,7 +109,7 @@ io.on('connection', function(socket)
             socket.emit("connected", socket.gameCode);
 
             // start the game
-            socketCodes[device.gameCode].emit("connected", gameCode);
+            socketCodes[device.gameCode].emit("connected", socket.gameCode);
 
             conditional_log('controller connected to device');
          }
