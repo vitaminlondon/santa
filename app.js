@@ -63,7 +63,7 @@ io.on('connection', function(socket)
             gameCode = crypto.randomBytes(3).toString('hex');
          }
          
-         conditional_log('UID for this game = ' + gameCode);
+         conditional_log('UID for this game will be ' + gameCode);
 
          // Store game code -> socket association
          socketCodes[gameCode] = socket;
@@ -72,6 +72,8 @@ io.on('connection', function(socket)
          // Tell game client to initialize 
          //  and show the game code to the user
          socket.emit("initialize", gameCode);
+
+         conditional_log('sent UID to game');
       }
 
       // if client is a phone controller
@@ -79,39 +81,37 @@ io.on('connection', function(socket)
       {
          conditional_log('client is controller using UID =' + device.gameCode);
 
-         // if game code is valid...
-         if (device.gameCode in socketCodes)
-         {
-            conditional_log('controller used by UID found');
-
-            if (!socketCodes[device.gameCode].activated)
-            {
-               // do not allow multiple controllers on the same game session
-               socketCodes[device.gameCode].activated = true;
-
-               // save the game code for controller commands
-               socket.gameCode = device.gameCode
-
-               // initialize the controller
-               socket.emit("connected", socket.gameCode);
-
-               // start the game
-               socketCodes[device.gameCode].emit("connected", gameCode);
-
-               conditional_log('controller connected to device');
-            }
-            else
-            {
-               conditional_log('a controller has already been connected to this game session');
-            }
-         }
-         //  else game code is invalid, 
-         //  send fail message and disconnect
-         else
+         // GAME CODE NOT FOUND
+         if (!socketCodes[device.gameCode])
          {
             conditional_log('game code received by controller is not found');
             socket.emit("fail", device.gameCode);
             socket.disconnect();
+         }
+         // ANOTHER CONTROLLER ALREADY COnneCt to the gAMe session tHAT thIS CONTROLLER WOULD LIKE TO CONNECT TO
+         else if (socketCodes[device.gameCode].activated)
+         {
+            socket.emit("late");
+            conditional_log('a controller has already been connected to this game session');
+         }
+         // CONTROLLER CAN CONNECT TO GAME-SESSION
+         else
+         {
+            conditional_log('controller used by UID found');
+
+            // do not allow multiple controllers on the same game session
+            socketCodes[device.gameCode].activated = true;
+
+            // save the game code for controller commands
+            socket.gameCode = device.gameCode
+
+            // initialize the controller
+            socket.emit("connected", socket.gameCode);
+
+            // start the game
+            socketCodes[device.gameCode].emit("connected", gameCode);
+
+            conditional_log('controller connected to device');
          }
       }
    });
