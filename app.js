@@ -18,6 +18,12 @@ conditional_log('<><><><><><><><> LISTENING <><><><><><><><>');
 // STORE SOCKET CONNECTIONS
 var socketCodes = {};
 
+// PREVENT CRASHING
+process.on('uncaughtException', function (err) {
+  console.error(err);
+  console.log("Node NOT Exiting...");
+});
+
 io.on('connection', function(socket) 
 {
    conditional_log('client connected >>' + socket.gameCode);
@@ -121,12 +127,12 @@ io.on('connection', function(socket)
 
    socket.on("resume", function(data)
    {
-      console.log('from resume');
+      conditional_log('from resume');
 
       if(socket.gameCode && socketCodes[socket.gameCode] && socketCodes[socket.gameCode].controller)
       {
          socketCodes[socket.gameCode].controller.emit("resume");
-         console.log('sent resume');
+         conditional_log('sent resume');
       }
    });
 
@@ -135,7 +141,7 @@ io.on('connection', function(socket)
       if(socket.gameCode && socket.gameCode in socketCodes)
       {
          socketCodes[socket.gameCode].game.emit("a-start");
-         console.log('a-start');
+         conditional_log('a-start');
       }
    });
 
@@ -144,7 +150,7 @@ io.on('connection', function(socket)
       if(socket.gameCode && socket.gameCode in socketCodes)
       {
          socketCodes[socket.gameCode].game.emit("b-start");
-         console.log('b-start');
+         conditional_log('b-start');
       }
    });
 
@@ -153,7 +159,7 @@ io.on('connection', function(socket)
       if(socket.gameCode && socket.gameCode in socketCodes)
       {
          socketCodes[socket.gameCode].game.emit("b-end");
-         console.log('b-end');
+         conditional_log('b-end');
       }
    });
 
