@@ -121,8 +121,9 @@ io.on('connection', function(socket)
 
    socket.on("resume", function(data)
    {
-      console.log('from resume')
-      if(socket.gameCode && socket.gameCode in socketCodes)
+      console.log('from resume');
+
+      if(socket.gameCode && socketCodes[socket.gameCode] && socketCodes[socket.gameCode].controller)
       {
          socketCodes[socket.gameCode].controller.emit("resume");
          console.log('sent resume');
