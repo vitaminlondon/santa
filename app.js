@@ -1,24 +1,9 @@
-// santass.herokuapp.com
-// heroku ps:scale web=1 --app santass
-
-
-
-
-
-
-
 // CONDITIONAL LOGGING
 var logging = true;
 var conditional_log = function (msg)
 {
    if (logging) console.log(msg);
 };
-
-
-
-
-
-
 
 // NODE MODULES
 var crypto = require('crypto');
@@ -33,52 +18,16 @@ conditional_log('<><><><><><><><> LISTENING <><><><><><><><>');
 // STORE SOCKET CONNECTIONS
 var socketCodes = {};
 
-
-
-
-
-
-
-
 io.on('connection', function(socket) 
 {
-   conditional_log('client connected');
-
+   conditional_log('client connected >>' + socket.gameCode);
 
    // CONFIRM CONNECTION WITH CLIENT
-   socket.emit("welcome", {});
-   conditional_log('client welcomed');
-   
+   socket.emit("welcome", {});  
    
    // Receive the client device type
    socket.on("device", function(device)
    {
-      // if(device.type == "game")
-      // {
-      //    conditional_log('client is game');
-
-      //    // GENERATE UNIQUE GAME CODE
-      //    var gameCode = crypto.randomBytes(3).toString('hex');
-      //    while (gameCode in socketCodes)
-      //    {
-      //       gameCode = crypto.randomBytes(3).toString('hex');
-      //    }
-         
-      //    conditional_log('UID for this game will be ' + gameCode);
-
-      //    // Store game code -> socket association
-      //    socketCodes[gameCode] = {
-      //       game : socket
-      //    };
-      //    socket.gameCode = gameCode
-         
-      //    // Tell game client to initialize 
-      //    //  and show the game code to the user
-      //    socket.emit("initialize", gameCode);
-
-      //    conditional_log('sent UID to game');
-      // }
-
       // if client is a phone controller
       if (device.type == "controller")
       {
@@ -126,7 +75,7 @@ io.on('connection', function(socket)
       {
          delete socketCodes[socket.gameCode];
       }
-      
+
       var gameCode = crypto.randomBytes(3).toString('hex');
       while (gameCode in socketCodes)
       {
@@ -172,7 +121,7 @@ io.on('connection', function(socket)
 
    socket.on("resume", function(data)
    {
-      console.log('got resume')
+      console.log('from resume')
       if(socket.gameCode && socket.gameCode in socketCodes)
       {
          socketCodes[socket.gameCode].controller.emit("resume");
