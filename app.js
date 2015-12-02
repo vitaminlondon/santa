@@ -67,7 +67,9 @@ io.on('connection', function(socket)
          conditional_log('UID for this game will be ' + gameCode);
 
          // Store game code -> socket association
-         socketCodes[gameCode] = socket;
+         socketCodes[gameCode] = {
+            game : socket
+         };
          socket.gameCode = gameCode
          
          // Tell game client to initialize 
@@ -101,6 +103,7 @@ io.on('connection', function(socket)
             conditional_log('controller used by UID found');
 
             // do not allow multiple controllers on the same game session
+            socketCodes[device.gameCode].controller = socket;
             socketCodes[device.gameCode].activated = true;
 
             // save the game code for controller commands
@@ -110,7 +113,7 @@ io.on('connection', function(socket)
             socket.emit("connected", socket.gameCode);
 
             // start the game
-            socketCodes[device.gameCode].emit("connected", socket.gameCode);
+            socketCodes[device.gameCode].game.emit("connected", socket.gameCode);
 
             conditional_log('controller connected to device');
          }
@@ -128,9 +131,11 @@ io.on('connection', function(socket)
       conditional_log('UID for this game will be ' + gameCode);
 
       // Store game code -> socket association
-      socketCodes[gameCode] = socket;
+      socketCodes[gameCode] = {
+         game: socket,
+         activated: false
+      };
       socket.gameCode = gameCode
-      socketCodes[gameCode].activated = false;
       
       // Tell game client to initialize 
       //  and show the game code to the user
@@ -141,14 +146,14 @@ io.on('connection', function(socket)
    {
       if(socket.gameCode && socket.gameCode in socketCodes)
       {
-         socketCodes[socket.gameCode].emit("jumpstart");
+         socketCodes[socket.gameCode].game.emit("jumpstart");
       }
    });
    socket.on("jumpend", function(data)
    {
       if(socket.gameCode && socket.gameCode in socketCodes)
       {
-         socketCodes[socket.gameCode].emit("jumpend");
+         socketCodes[socket.gameCode].game.emit("jumpend");
       }
    });
    
@@ -156,7 +161,7 @@ io.on('connection', function(socket)
    {
       if(socket.gameCode && socket.gameCode in socketCodes)
       {
-         socketCodes[socket.gameCode].emit("start");
+         socketCodes[socket.gameCode].game.emit("start");
       }
    });
 
@@ -165,7 +170,7 @@ io.on('connection', function(socket)
       console.log('got resume')
       if(socket.gameCode && socket.gameCode in socketCodes)
       {
-         socketCodes[socket.gameCode].emit("resume");
+         socketCodes[socket.gameCode].controller.emit("resume");
          console.log('sent resume');
       }
    });
@@ -174,7 +179,7 @@ io.on('connection', function(socket)
    {
       if(socket.gameCode && socket.gameCode in socketCodes)
       {
-         socketCodes[socket.gameCode].emit("a-start");
+         socketCodes[socket.gameCode].game.emit("a-start");
          console.log('a-start');
       }
    });
@@ -183,7 +188,7 @@ io.on('connection', function(socket)
    {
       if(socket.gameCode && socket.gameCode in socketCodes)
       {
-         socketCodes[socket.gameCode].emit("b-start");
+         socketCodes[socket.gameCode].game.emit("b-start");
          console.log('b-start');
       }
    });
@@ -192,7 +197,7 @@ io.on('connection', function(socket)
    {
       if(socket.gameCode && socket.gameCode in socketCodes)
       {
-         socketCodes[socket.gameCode].emit("b-end");
+         socketCodes[socket.gameCode].game.emit("b-end");
          console.log('b-end');
       }
    });
@@ -203,7 +208,7 @@ io.on('connection', function(socket)
       if(socket.gameCode && (socket.gameCode in socketCodes))
       {
          conditional_log('active socket disconnected for UID = ' + socket.gameCode);
-         socketCodes[socket.gameCode].emit("disconnected", socket.gameCode);
+         socketCodes[socket.gameCode].game.emit("disconnected", socket.gameCode);
          delete socketCodes[socket.gameCode];
       }
    });
