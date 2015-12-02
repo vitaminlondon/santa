@@ -122,6 +122,11 @@ io.on('connection', function(socket)
 
    socket.on("new", function ()
    {
+      if(socket.gameCode && (socket.gameCode in socketCodes))
+      {
+         delete socketCodes[socket.gameCode];
+      }
+      
       var gameCode = crypto.randomBytes(3).toString('hex');
       while (gameCode in socketCodes)
       {
