@@ -137,41 +137,21 @@ io.on('connection', function(socket)
       socket.emit("initialize", gameCode);
    });
    
-   socket.on("jump", function(data)
+   socket.on("jumpstart", function(data)
    {
       if(socket.gameCode && socket.gameCode in socketCodes)
       {
-         socketCodes[socket.gameCode].emit("jump");
+         socketCodes[socket.gameCode].emit("jumpstart");
       }
    });
-   socket.on("up", function(data)
+   socket.on("jumpend", function(data)
    {
       if(socket.gameCode && socket.gameCode in socketCodes)
       {
-         socketCodes[socket.gameCode].emit("up");
+         socketCodes[socket.gameCode].emit("jumpend");
       }
    });
-   socket.on("down", function(data)
-   {
-      if(socket.gameCode && socket.gameCode in socketCodes)
-      {
-         socketCodes[socket.gameCode].emit("down");
-      }
-   });
-   socket.on("left", function(data)
-   {
-      if(socket.gameCode && socket.gameCode in socketCodes)
-      {
-         socketCodes[socket.gameCode].emit("left");
-      }
-   });
-   socket.on("right", function(data)
-   {
-      if(socket.gameCode && socket.gameCode in socketCodes)
-      {
-         socketCodes[socket.gameCode].emit("right");
-      }
-   });
+   
    socket.on("start", function(data)
    {
       if(socket.gameCode && socket.gameCode in socketCodes)
