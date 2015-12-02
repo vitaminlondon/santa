@@ -162,9 +162,11 @@ io.on('connection', function(socket)
 
    socket.on("resume", function(data)
    {
+      console.log('got resume')
       if(socket.gameCode && socket.gameCode in socketCodes)
       {
          socketCodes[socket.gameCode].emit("resume");
+         console.log('sent resume');
       }
    });
 
