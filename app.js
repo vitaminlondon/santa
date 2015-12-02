@@ -77,10 +77,7 @@ io.on('connection', function(socket)
 
    socket.on("new", function ()
    {
-      if(socket.gameCode && (socket.gameCode in socketCodes))
-      {
-         delete socketCodes[socket.gameCode];
-      }
+      if (socket.gameCode && socketCodes[socket.gameCode]) delete socketCodes[socket.gameCode];
 
       var gameCode = crypto.randomBytes(3).toString('hex');
       while (gameCode in socketCodes)
@@ -104,14 +101,14 @@ io.on('connection', function(socket)
    
    socket.on("jumpstart", function(data)
    {
-      if(socket.gameCode && socket.gameCode in socketCodes)
+      if(socket.gameCode && socketCodes[socket.gameCode] && socketCodes[socket.gameCode].game)
       {
          socketCodes[socket.gameCode].game.emit("jumpstart");
       }
    });
    socket.on("jumpend", function(data)
    {
-      if(socket.gameCode && socket.gameCode in socketCodes)
+      if(socket.gameCode && socketCodes[socket.gameCode] && socketCodes[socket.gameCode].game)
       {
          socketCodes[socket.gameCode].game.emit("jumpend");
       }
@@ -119,7 +116,7 @@ io.on('connection', function(socket)
    
    socket.on("start", function(data)
    {
-      if(socket.gameCode && socket.gameCode in socketCodes)
+      if(socket.gameCode && socketCodes[socket.gameCode] && socketCodes[socket.gameCode].game)
       {
          socketCodes[socket.gameCode].game.emit("start");
       }
@@ -138,7 +135,7 @@ io.on('connection', function(socket)
 
    socket.on("a-start", function(data)
    {
-      if(socket.gameCode && socket.gameCode in socketCodes)
+      if(socket.gameCode && socketCodes[socket.gameCode] && socketCodes[socket.gameCode].game)
       {
          socketCodes[socket.gameCode].game.emit("a-start");
          conditional_log('a-start');
@@ -147,7 +144,7 @@ io.on('connection', function(socket)
 
    socket.on("b-start", function(data)
    {
-      if(socket.gameCode && socket.gameCode in socketCodes)
+      if(socket.gameCode && socketCodes[socket.gameCode] && socketCodes[socket.gameCode].game)
       {
          socketCodes[socket.gameCode].game.emit("b-start");
          conditional_log('b-start');
@@ -156,7 +153,7 @@ io.on('connection', function(socket)
 
    socket.on("b-end", function(data)
    {
-      if(socket.gameCode && socket.gameCode in socketCodes)
+      if(socket.gameCode && socketCodes[socket.gameCode] && socketCodes[socket.gameCode].game)
       {
          socketCodes[socket.gameCode].game.emit("b-end");
          conditional_log('b-end');
@@ -166,7 +163,7 @@ io.on('connection', function(socket)
    socket.on('disconnect', function () 
    {     
       // remove game code -> socket association on disconnect
-      if(socket.gameCode && (socket.gameCode in socketCodes))
+      if(socket.gameCode && socketCodes[socket.gameCode])
       {
          conditional_log('active socket disconnected for UID = ' + socket.gameCode);
          socketCodes[socket.gameCode].game.emit("disconnected", socket.gameCode);
