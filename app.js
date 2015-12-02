@@ -173,6 +173,7 @@ io.on('connection', function(socket)
       if(socket.gameCode && socket.gameCode in socketCodes)
       {
          socketCodes[socket.gameCode].emit("a-start");
+         console.log('a-start');
       }
    });
 
@@ -181,6 +182,7 @@ io.on('connection', function(socket)
       if(socket.gameCode && socket.gameCode in socketCodes)
       {
          socketCodes[socket.gameCode].emit("b-start");
+         console.log('b-start');
       }
    });
 
@@ -189,6 +191,7 @@ io.on('connection', function(socket)
       if(socket.gameCode && socket.gameCode in socketCodes)
       {
          socketCodes[socket.gameCode].emit("b-end");
+         console.log('b-end');
       }
    });
 
