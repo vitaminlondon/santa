@@ -168,19 +168,27 @@ io.on('connection', function(socket)
       }
    });
 
-   socket.on("a", function(data)
+   socket.on("a-start", function(data)
    {
       if(socket.gameCode && socket.gameCode in socketCodes)
       {
-         socketCodes[socket.gameCode].emit("a");
+         socketCodes[socket.gameCode].emit("a-start");
       }
    });
 
-   socket.on("b", function(data)
+   socket.on("b-start", function(data)
    {
       if(socket.gameCode && socket.gameCode in socketCodes)
       {
-         socketCodes[socket.gameCode].emit("b");
+         socketCodes[socket.gameCode].emit("b-start");
+      }
+   });
+
+   socket.on("b-end", function(data)
+   {
+      if(socket.gameCode && socket.gameCode in socketCodes)
+      {
+         socketCodes[socket.gameCode].emit("b-end");
       }
    });
 
