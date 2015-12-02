@@ -53,34 +53,34 @@ io.on('connection', function(socket)
    // Receive the client device type
    socket.on("device", function(device)
    {
-      if(device.type == "game")
-      {
-         conditional_log('client is game');
+      // if(device.type == "game")
+      // {
+      //    conditional_log('client is game');
 
-         // GENERATE UNIQUE GAME CODE
-         var gameCode = crypto.randomBytes(3).toString('hex');
-         while (gameCode in socketCodes)
-         {
-            gameCode = crypto.randomBytes(3).toString('hex');
-         }
+      //    // GENERATE UNIQUE GAME CODE
+      //    var gameCode = crypto.randomBytes(3).toString('hex');
+      //    while (gameCode in socketCodes)
+      //    {
+      //       gameCode = crypto.randomBytes(3).toString('hex');
+      //    }
          
-         conditional_log('UID for this game will be ' + gameCode);
+      //    conditional_log('UID for this game will be ' + gameCode);
 
-         // Store game code -> socket association
-         socketCodes[gameCode] = {
-            game : socket
-         };
-         socket.gameCode = gameCode
+      //    // Store game code -> socket association
+      //    socketCodes[gameCode] = {
+      //       game : socket
+      //    };
+      //    socket.gameCode = gameCode
          
-         // Tell game client to initialize 
-         //  and show the game code to the user
-         socket.emit("initialize", gameCode);
+      //    // Tell game client to initialize 
+      //    //  and show the game code to the user
+      //    socket.emit("initialize", gameCode);
 
-         conditional_log('sent UID to game');
-      }
+      //    conditional_log('sent UID to game');
+      // }
 
       // if client is a phone controller
-      else if (device.type == "controller")
+      if (device.type == "controller")
       {
          conditional_log('client is controller using UID =' + device.gameCode);
 
