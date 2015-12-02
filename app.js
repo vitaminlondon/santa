@@ -159,6 +159,15 @@ io.on('connection', function(socket)
          socketCodes[socket.gameCode].emit("start");
       }
    });
+
+   socket.on("resume", function(data)
+   {
+      if(socket.gameCode && socket.gameCode in socketCodes)
+      {
+         socketCodes[socket.gameCode].emit("resume");
+      }
+   });
+
    socket.on("a", function(data)
    {
       if(socket.gameCode && socket.gameCode in socketCodes)
@@ -166,6 +175,7 @@ io.on('connection', function(socket)
          socketCodes[socket.gameCode].emit("a");
       }
    });
+
    socket.on("b", function(data)
    {
       if(socket.gameCode && socket.gameCode in socketCodes)
